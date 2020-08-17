@@ -1,7 +1,7 @@
 # NEXT
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/YKMeIz/Pill?style=flat-square)](https://goreportcard.com/report/github.com/YKMeIz/Pill)
-[![License](https://img.shields.io/github/license/YKMeIz/Pill.svg?color=%232b2b2b&style=flat-square)](https://github.com/YKMeIz/Pill/blob/master/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/YKMeIz/next?style=flat-square)](https://goreportcard.com/report/github.com/YKMeIz/next)
+[![License](https://img.shields.io/github/license/YKMeIz/next.svg?color=%232b2b2b&style=flat-square)](https://github.com/YKMeIz/next/blob/master/LICENSE)
 
 NEXT is a dead-simple IT automation tool enabling concurrent commands execution on multiple machines. It is inspired by Ansible and GNU Make. NEXT is agentless, and running its tasks remotely via temporarily SSH connections.
 
