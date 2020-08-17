@@ -1,0 +1,19 @@
+global:
+  private_key: /Users/ykmeiz/.ssh/id_rsa
+  known_hosts: /Users/ykmeiz/.ssh/known_hosts
+  ignore_host_key: true
+  port: 22
+  user: ykmeiz
+
+run_install:
+  target:
+    - 10.0.0.155
+  script:
+    - uname -a
+    - uptime
+
+after:
+  target:
+    - 10.0.0.155
+  script:
+    - hostname

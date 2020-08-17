@@ -1,0 +1,12 @@
+run_install:
+  target:
+    - 10.0.0.155
+  script:
+    - uptime
+
+after:
+  target:
+    - 10.0.0.155
+  script:
+    - echo "This is $(hostname):"
+    - uname -a
