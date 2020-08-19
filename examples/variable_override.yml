@@ -1,20 +1,31 @@
-mashiro:
-  address: 10.0.0.155
-  port: 22
-  user: ykmeiz
+global:
   private_key: /Users/ykmeiz/.ssh/id_rsa
   known_hosts: /Users/ykmeiz/.ssh/known_hosts
+  ignore_host_key: false
+  port: 22
+  user: ykmeiz
+
+mashiro:
+  address: 10.0.0.155
   ignore_host_key: true
+
+shibuya:
+  address: 10.0.0.156
+  port: 33
+  private_key: /home/ykmeiz/.ssh/id_rsa
+  known_hosts: /home/ykmeiz/.ssh/known_hosts
 
 run_uptime:
   target:
     - mashiro
+    - shibuya
   script:
     - uptime
 
 run_uname:
   target:
     - mashiro
+    - shibuya
   script:
     - echo "This is $(hostname):"
     - uname -a

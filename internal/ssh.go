@@ -8,12 +8,9 @@ import (
 	"strconv"
 )
 
+// Connect makes SSH connection and return client.
 func Connect(t target) *client {
-	// A public key may be used to authenticate against the remote
-	// server by using an unencrypted PEM-encoded private key file.
-	//
-	// If you have an encrypted private key, the crypto/x509 package
-	// can be used to decrypt it.
+	// Read private key.
 	key, err := ioutil.ReadFile(t.PrivateKey)
 	if err != nil {
 		log.Fatalf("unable to read private key: %v", err)
@@ -26,7 +23,6 @@ func Connect(t target) *client {
 	}
 
 	config := &ssh.ClientConfig{
-		//User: user.Username,
 		User: t.User,
 		Auth: []ssh.AuthMethod{
 			// Use the PublicKeys method for remote authentication.
@@ -35,6 +31,7 @@ func Connect(t target) *client {
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
+	// Host key needs to be checked.
 	if !t.IgnoreHostKey {
 		pubKey, err := ioutil.ReadFile(t.KnownHosts)
 		if err != nil {
@@ -43,16 +40,20 @@ func Connect(t target) *client {
 
 		var hostKey ssh.PublicKey
 
+		// Loop all hosts in file and find the key matches given address.
 		for {
 			_, hosts, key, _, rest, err := ssh.ParseKnownHosts(pubKey)
 			if err != nil {
 				log.Fatalf("unable to parse public key: %v", err)
 			}
+
 			if isIn(t.Address, hosts) {
 				hostKey = key
 				break
 			}
+
 			pubKey = rest
+
 			if len(rest) == 0 {
 				log.Fatalf("unable to find host key")
 			}
@@ -78,17 +79,14 @@ func isIn(s string, search []string) bool {
 	return false
 }
 
+// RemoteExec creates SSH session and executes given command.
 func (c *client) RemoteExec(cmd string) string {
-	// Each ClientConn can support multiple interactive sessions,
-	// represented by a Session.
 	session, err := c.NewSession()
 	if err != nil {
 		log.Fatal("Failed to create session: ", err)
 	}
 	defer session.Close()
 
-	// Once a Session is created, you can execute a single command on
-	// the remote side using the Run method.
 	var stdout, stderr bytes.Buffer
 	session.Stdout = &stdout
 	session.Stderr = &stderr

@@ -5,15 +5,15 @@ global:
   port: 22
   user: ykmeiz
 
-run_install:
+run_uptime:
   target:
     - 10.0.0.155
   script:
-    - uname -a
     - uptime
 
-after:
+run_uname:
   target:
     - 10.0.0.155
   script:
-    - hostname
+    - echo "This is $(hostname):"
+    - uname -a

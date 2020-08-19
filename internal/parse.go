@@ -6,7 +6,8 @@ import (
 	"os"
 )
 
-func Parse(file, arg string) ([]target, []string) {
+// Parse unmarshals rule from file, and return target details and commands need to be executed remotely.
+func Parse(file, rule string) ([]target, []string) {
 	var (
 		c config
 		r run
@@ -20,13 +21,15 @@ func Parse(file, arg string) ([]target, []string) {
 		log.Fatalln(err)
 	}
 
-	err = viper.UnmarshalKey(arg, &r)
+	err = viper.UnmarshalKey(rule, &r)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	for _, v := range r.Target {
 		var item target
+
+		// Check if target variable is defined.
 		if viper.IsSet(v) {
 			if err := viper.UnmarshalKey(v, &item); err != nil {
 				log.Fatalln(err)
@@ -34,6 +37,7 @@ func Parse(file, arg string) ([]target, []string) {
 		} else {
 			item.Address = v
 		}
+
 		t = append(t, targetCompletion(c.Global, item))
 	}
 
