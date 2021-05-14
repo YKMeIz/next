@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/viper"
 	"log"
 	"os"
+	"strings"
 )
 
 // Parse unmarshals rule from file, and return target details and commands need to be executed remotely.
@@ -45,16 +46,22 @@ func Parse(file, rule string) ([]target, []string) {
 }
 
 func readConfig(file string) {
-	f, err := os.Open(file)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	f, _ := os.Open(file)
 
 	defer f.Close()
 
 	viper.SetConfigType("yaml")
-	err = viper.ReadConfig(f)
-	if err != nil {
-		log.Fatalln(err)
+	_ = viper.ReadConfig(f)
+}
+
+// ParseAvailableCommands finds all defined commands as next arguments.
+func ParseAvailableCommands(file string) []string {
+	readConfig(file)
+	var cmds []string
+	for _, v := range viper.AllKeys() {
+		if strings.Contains(v, "script") {
+			cmds = append(cmds, strings.TrimSuffix(v, ".script"))
+		}
 	}
+	return cmds
 }
